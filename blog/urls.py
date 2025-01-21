@@ -1,10 +1,6 @@
 from django.urls import path
-from rest_framework import viewsets
 from .models import Category
 from .serializers import CategorySerializer
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from .views import CategoryListCreateView, CategoryRetrieveUpdateDestroyView, PublicationListCreateView, \
     PublicationRetrieveUpdateDestroyView
 
