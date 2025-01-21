@@ -3,4 +3,4 @@ from .models import Category
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')  # Поля для отображения в списке категорий
+    list_display = ('name', 'description')
