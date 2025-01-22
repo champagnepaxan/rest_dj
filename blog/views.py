@@ -1,8 +1,11 @@
 from rest_framework import generics, permissions
 from rest_framework.exceptions import PermissionDenied
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 
 from .models import Category, Publication
 from .serializers import CategorySerializer, PublicationSerializer
+from .filters import CategoryFilter, PublicationFilter
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -15,6 +18,9 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 class CategoryListCreateView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = CategoryFilter
+    search_fields = ['name']
 
 
 class CategoryRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
@@ -26,6 +32,9 @@ class PublicationListCreateView(generics.ListCreateAPIView):
     queryset = Publication.objects.filter(is_archived=False)
     serializer_class = PublicationSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_class = PublicationFilter
+    search_fields = ['content', 'user__username', 'category__name']
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
